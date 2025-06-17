@@ -2,8 +2,8 @@ const express = require('express');
 // const fs = require('fs');
 const morgan = require('morgan');
 
-const userRouter = require('./routes/userRouter');
-const tourRouter = require('./routes/tourRouter');
+const userRouter = require('../routes/userRouter');
+const tourRouter = require('../routes/tourRouter');
 
 const app = express();
 // const tours = JSON.parse(

@@ -7,12 +7,12 @@ const helmet = require('helmet');
 // const mongoSanitize = require('express-mongo-sanitize');
 // const xss = require('xss-clean');
 const hpp = require('hpp');
-const AppError = require('./utils/appError');
-const globalErrorHandler = require('./controllor/errorControllor');
-const userRouter = require('./routes/userRouter');
-const tourRouter = require('./routes/tourRouter');
-const reviewRouter = require('./routes/reviewRouter');
-const viewRouter = require('./routes/reviewRouter');
+const AppError = require('../utils/appError');
+const globalErrorHandler = require('../controller/errorController');
+const userRouter = require('../routes/userRouter');
+const tourRouter = require('../routes/tourRouter');
+const reviewRouter = require('../routes/reviewRouter');
+const viewRouter = require('../routes/reviewRouter');
 
 const app = express();
 

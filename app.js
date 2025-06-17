@@ -7,6 +7,7 @@ const helmet = require('helmet');
 // const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
+const compression = require('compression');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controller/errorController');
@@ -34,13 +35,13 @@ app.use(
         defaultSrc: ["'self'"],
         scriptSrc: [
           "'self'",
-          'https://js.stripe.com', // ✅ Needed for Stripe.js
+          'https://js.stripe.com', //  Needed for Stripe.js
           'https://api.mapbox.com',
           'https://cdnjs.cloudflare.com',
         ],
         frameSrc: [
           "'self'",
-          'https://js.stripe.com', // ✅ Needed for Stripe iframe
+          'https://js.stripe.com', // Needed for Stripe iframe
         ],
         styleSrc: [
           "'self'",
@@ -59,7 +60,7 @@ app.use(
           "'self'",
           'https://api.mapbox.com',
           'https://events.mapbox.com',
-          'https://js.stripe.com', // ✅ Allow API connections to Stripe
+          'https://js.stripe.com', // Allow API connections to Stripe
           'ws:',
         ],
         workerSrc: ["'self'", 'blob:'],
@@ -110,11 +111,11 @@ app.use(
     ],
   }),
 );
-
+app.use(compression());
 // Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
-  console.log(req.cookies);
+  // console.log(req.cookies);
   next();
 });
 
