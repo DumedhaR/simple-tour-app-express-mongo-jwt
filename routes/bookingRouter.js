@@ -1,16 +1,16 @@
 const express = require('express');
-const bookingController = require('../controllor/bookingController');
-const authControllor = require('../controllor/authControllor');
+const bookingController = require('../controller/bookingController');
+const authController = require('../controller/authController');
 
 const router = express.Router();
 
-router.use(authControllor.protect);
+router.use(authController.protect);
 
 router
   .route('/checkout-session/:tourId')
-  .get(authControllor.protect, bookingController.getCheckoutSession);
+  .get(authController.protect, bookingController.getCheckoutSession);
 
-router.use(authControllor.restrictTo('admin', 'lead-guide'));
+router.use(authController.restrictTo('admin', 'lead-guide'));
 
 router
   .route('/')
