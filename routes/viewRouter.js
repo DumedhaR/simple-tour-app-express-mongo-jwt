@@ -10,13 +10,9 @@ const router = express.Router();
 //     tour: 'The Forest Hikers',
 //   });
 // });
+// router.use(viewsController.alerts);
 
-router.get(
-  '/',
-  bookingController.createBookingCheckout,
-  authController.isLogged,
-  viewsController.getOverview,
-);
+router.get('/', authController.isLogged, viewsController.getOverview);
 
 router.get(
   '/tour/:slug',
@@ -31,5 +27,10 @@ router.post(
   authController.protect,
   viewsController.updateUserData,
 );
-router.get('/my-tours', authController.protect, viewsController.getMyTours);
+router.get(
+  '/my-tours',
+  bookingController.createBookingCheckout,
+  authController.protect,
+  viewsController.getMyTours,
+);
 module.exports = router;

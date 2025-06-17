@@ -8,6 +8,7 @@ const helmet = require('helmet');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
+const cors = require('cors');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controller/errorController');
@@ -16,6 +17,7 @@ const userRouter = require('./routes/userRouter');
 const reviewRouter = require('./routes/reviewRouter');
 const viewRouter = require('./routes/viewRouter');
 const bookingRouter = require('./routes/bookingRouter');
+// const bookingController = require('./controller/bookingController');
 
 const app = express();
 
@@ -25,6 +27,18 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 // 1) GLOBAL MIDDLEWARES
+
+// Implement CORS
+app.use(cors());
+// Access-Control-Allow-Origin *
+// if server api.natours.com, and front-end: natours.com
+// app.use(cors({
+//   origin: 'https://www.natours.com'
+// }))
+
+// allow COROS on simple req like update, patch, delete
+app.options('/{*splat}', cors());
+// app.options('/api/v1/tours/:id', cors());
 
 // Serving static files
 app.use(express.static(path.join(__dirname, 'public')));
@@ -88,6 +102,13 @@ const limiter = rateLimit({
   message: 'Too many requests from this IP, please try again in an hour!',
 });
 app.use('/api', limiter);
+
+// Stripe webhook, BEFORE body-parser, because stripe needs the body as stream
+// app.post(
+//   '/webhook-checkout',
+//   express.raw({ type: 'application/json' }),
+//   bookingController.webhookCheckout,
+// );
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
