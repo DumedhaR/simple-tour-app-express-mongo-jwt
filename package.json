@@ -9,7 +9,7 @@
     "start:prod": "cross-env NODE_ENV=production nodemon server.js",
     "debug": "ndb server.js",
     "watch:js": "npx parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js",
-    "build:js": "npx parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js"
+    "build:js": "npx parcel build ./public/js/index.js --out-dir ./public/js --out-file bundle.js"
   },
   "author": "Rukshan Perera",
   "license": "ISC",
