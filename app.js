@@ -21,7 +21,8 @@ const bookingRouter = require('./routes/bookingRouter');
 
 const app = express();
 
-app.enable('trust proxy');
+app.set('trust proxy', 1);
+// app.enable('trust proxy');
 
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
@@ -29,7 +30,11 @@ app.set('views', path.join(__dirname, 'views'));
 // 1) GLOBAL MIDDLEWARES
 
 // Implement CORS
-app.use(cors());
+const corsOptions = {
+  origin: 'http://localhost:5173',
+  credentials: true,
+};
+app.use(cors(corsOptions));
 // Access-Control-Allow-Origin *
 // if server api.natours.com, and front-end: natours.com
 // app.use(cors({
@@ -37,7 +42,7 @@ app.use(cors());
 // }))
 
 // allow COROS on simple req like update, patch, delete
-app.options('/{*splat}', cors());
+app.options('/{*splat}', cors(corsOptions));
 // app.options('/api/v1/tours/:id', cors());
 
 // Serving static files
@@ -97,7 +102,7 @@ if (process.env.NODE_ENV === 'development') {
 
 // Limit requests from same API
 const limiter = rateLimit({
-  max: 100,
+  max: 1000,
   windowMs: 60 * 60 * 1000,
   message: 'Too many requests from this IP, please try again in an hour!',
 });
