@@ -10,6 +10,10 @@ router
   .route('/checkout-session/:tourId')
   .get(authController.protect, bookingController.getCheckoutSession);
 
+router
+  .route('/save-booking-session')
+  .post(bookingController.saveBookingFromSession);
+
 router.use(authController.restrictTo('admin', 'lead-guide'));
 
 router

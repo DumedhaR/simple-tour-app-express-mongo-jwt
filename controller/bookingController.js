@@ -1,6 +1,6 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const Tour = require('../model/Tour');
-// const User = require('../model/User');
+const User = require('../model/User');
 const Booking = require('../model/Booking');
 const factory = require('./handlerFactory');
 const catchAsync = require('../utils/catchAsync');
@@ -11,8 +11,8 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
     // success_url: `${req.protocol}://${req.get('host')}/my-tours?alert=booking`,
-    success_url: `${req.protocol}://${req.get('host')}/my-tours/?tour=${req.params.tourId}&user=${req.user.id}&price=${tour.price}`,
-    cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`,
+    success_url: `${process.env.CLIENT_URL}/booking-success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${process.env.CLIENT_URL}/tour/${tour.slug}`,
     customer_email: req.user.email,
     client_reference_id: req.params.tourId,
     mode: 'payment',
@@ -46,6 +46,22 @@ exports.createBookingCheckout = catchAsync(async (req, res, next) => {
   await Booking.create({ tour, user, price });
 
   res.redirect(req.originalUrl.split('?')[0]);
+});
+
+exports.saveBookingFromSession = catchAsync(async (req, res, next) => {
+  const session = await stripe.checkout.sessions.retrieve(req.body.sessionId);
+
+  if (session.payment_status !== 'paid') {
+    return next();
+  }
+
+  const tourId = session.client_reference_id;
+  const user = await User.findOne({ email: session.customer_email });
+  const price = session.amount_total / 100;
+
+  await Booking.create({ tour: tourId, user: user.id, price });
+
+  res.status(200).json({ status: 'success' });
 });
 
 // this for working with stripe webhooks for save bookig rec in our db ------

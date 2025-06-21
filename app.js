@@ -31,7 +31,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Implement CORS
 const corsOptions = {
-  origin: 'http://localhost:5173',
+  origin: process.env.CLIENT_URL,
   credentials: true,
 };
 app.use(cors(corsOptions));
