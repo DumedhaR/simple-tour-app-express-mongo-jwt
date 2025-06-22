@@ -55,18 +55,11 @@ exports.signUp = catchAsync(async (req, res, next) => {
   });
 
   // send welcome email
-  const url = `${req.protocol}://${req.get('host')}/me`;
+  const url = `${process.env.CLIENT_URL}/me`;
   await new Email(newUser, url).sendWelcome();
 
   // send jwt with response
-  const token = signToken(newUser._id);
-  res.status(201).json({
-    status: 'success',
-    token,
-    data: {
-      user: newUser,
-    },
-  });
+  createAndSendToken(newUser, 201, req, res);
 });
 
 exports.logIn = catchAsync(async (req, res, next) => {

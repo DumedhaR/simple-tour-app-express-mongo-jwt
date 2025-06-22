@@ -24,8 +24,9 @@ const sendErrorDev = (req, res, err) => {
 
 const handleDuplicateFieldsDB = (err) => {
   const key = Object.keys(err.keyValue)[0];
-  const value = Object.values(err.keyValue)[0];
-  const message = `Duplicate value for "${key}": "${value}". Please use another value.`;
+  // const value = Object.values(err.keyValue)[0];
+  const message = `The ${key} is already in use. Please use a different one.`;
+
   return new AppError(message, 400);
 };
 const handleValidationErrorDB = (err) => {
