@@ -116,11 +116,19 @@ exports.protect = catchAsync(async (req, res, next) => {
   // Check if the user still exists
   const user = await User.findById(decoded.id);
   if (!user) {
+    res.cookie('jwt', 'loggedout', {
+      expires: new Date(Date.now() + 10 * 1000),
+      httpOnly: true,
+    });
     return next(new AppError('User no longer exist.', 401));
   }
 
   // Check if user changed password after token was issued
   if (user.changedPasswordAfter(decoded.iat)) {
+    res.cookie('jwt', 'loggedout', {
+      expires: new Date(Date.now() + 10 * 1000),
+      httpOnly: true,
+    });
     return next(
       new AppError('Your session is expired! please login again', 401),
     );

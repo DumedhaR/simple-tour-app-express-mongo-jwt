@@ -21,6 +21,9 @@ const bookingRouter = require('./routes/bookingRouter');
 
 const app = express();
 
+// Enable extended query parsing
+app.set('query parser', 'extended');
+
 app.set('trust proxy', 1);
 // app.enable('trust proxy');
 
